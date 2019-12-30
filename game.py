@@ -117,8 +117,3 @@ class Game:
             print(self.matrix)
         else:
             print('movement not allowed')
-
-moves = [0,1,2,3]
-g =  Game()
-while (g.game_state != 2):
-    g.step(random.choice(moves))
