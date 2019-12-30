@@ -39,6 +39,7 @@ class Game:
                                 self.matrix[row][idx] *= 2
                                 self.matrix[row][idx2] = 0
                                 added= True
+            self.slide_left(added)
 
     def slide_left(self,add):
         slided = add
@@ -50,9 +51,14 @@ class Game:
                 if idx != jdx:
                     self.matrix[row, idx] = 0
                     slided = True
+        if slided:
+            self.add_number()
 
     def check_state(self):
         size = self.matrix.shape[0]
+
+        if len(np.where(self.matrix == 0)[0]) > 0:
+            return
 
         # check if there is equal numbers on the y axis
         for row in range(size):
@@ -111,3 +117,8 @@ class Game:
             print(self.matrix)
         else:
             print('movement not allowed')
+
+moves = [0,1,2,3]
+g =  Game()
+while (g.game_state != 2):
+    g.step(random.choice(moves))
