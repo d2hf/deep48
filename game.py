@@ -8,6 +8,8 @@ class Game:
 
         self._start_matrix()
 
+        self.actions = [0,1,2,3]
+
 
     def _start_matrix(self):
         self.matrix = np.zeros(shape=(self.size,self.size))
@@ -51,11 +53,21 @@ class Game:
                 if idx != jdx:
                     self.matrix[row, idx] = 0
                     slided = True
+
+        self.reward = -1
+
         if slided:
             self.add_number()
+            self.reward = 0
+
 
     def check_state(self):
         size = self.matrix.shape[0]
+
+        if len(np.where(self.matrix == 2048)[0]) > 0:
+            self.game_state = 1
+            self.reward = 1
+            return
 
         if len(np.where(self.matrix == 0)[0]) > 0:
             return
@@ -114,6 +126,7 @@ class Game:
             elif direction == 3:
                 self.down()
             self.check_state()
-            print(self.matrix)
+
+            return self.matrix,self.reward,self.game_state
         else:
             print('movement not allowed')

@@ -1,12 +1,14 @@
 import numpy as np
 
 class ConvolutionSolver:
-    def __init__(self,state,actions):
+    def __init__(self,state,actions,learningRate = 0.01, discount = 0.95):
         self.matrix = np.array(state)
         self.shape = self.matrix.shape[0]
         self._createTable(actions)
+        self.numFits = 0
 
-        self.fit(state)
+        self.learningRate = learningRate
+        self.discount = discount
 
     def _createTable(self,actions):
         size = self.shape * (self.shape - 1)
@@ -22,6 +24,9 @@ class ConvolutionSolver:
         else:
             return 0
 
+    def discretize(self,state):
+        h = _horizontalConvolution()
+        v = _verticalConvolution()
 
     def _horizontalConvolution(self):
         sum = 0
@@ -31,7 +36,7 @@ class ConvolutionSolver:
                     slice = self.matrix[i,j:j+2]
 
                     sum += self._filter(slice)
-        self.horizontal = sum
+        return sum
 
     def _verticalConvolution(self):
         sum = 0
@@ -41,11 +46,14 @@ class ConvolutionSolver:
                     slice = self.matrix[j:j+2,i]
 
                     sum += self._filter(slice)
-        self.vertical = sum
+        return sum
+
+    def maxFutureQ(self,nextState):
+
 
     def fit(self,state):
-        self._horizontalConvolution()
-        self._verticalConvolution()
+        self.discretize(state)
+        self.numFits +=1
 
         return np.argmax(self.table[self.horizontal,self.vertical])
 
