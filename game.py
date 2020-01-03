@@ -4,15 +4,15 @@ import random
 class Game:
     def __init__(self,n=4):
         self.size = n
+        self.actions = [0,1,2,3]
+        self.start_game()
+
+
+    def start_game(self):
+        self.matrix = np.zeros(shape=(self.size,self.size))
+
         self.game_state = 0
 
-        self._start_matrix()
-
-        self.actions = [0,1,2,3]
-
-
-    def _start_matrix(self):
-        self.matrix = np.zeros(shape=(self.size,self.size))
         self.add_number()
         self.add_number()
 
@@ -58,7 +58,7 @@ class Game:
 
         if slided:
             self.add_number()
-            self.reward = 0
+            self.reward = -1
 
 
     def check_state(self):
@@ -85,9 +85,6 @@ class Game:
                         return
 
         self.game_state = 2
-
-
-
 
     def up(self):
         self.matrix = np.transpose(self.matrix)
@@ -126,7 +123,11 @@ class Game:
             elif direction == 3:
                 self.down()
             self.check_state()
+            self.biggest_tile()
 
             return self.matrix,self.reward,self.game_state
         else:
             print('movement not allowed')
+
+    def biggest_tile(self):
+        self.biggest = np.amax(self.matrix)
